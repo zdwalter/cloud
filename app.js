@@ -62,6 +62,7 @@ function redirect(req, res) {
     self.data = null;
 
     console.log(req.cookies);
+    self.app = get_argument(req, 'app', null);
     var url = get_argument(req, 'url', null);
     if ( !url ) 
         return error(res, 'miss param [url]');
@@ -97,6 +98,9 @@ function redirect(req, res) {
         console.log('headers:' + JSON.stringify(res.headers));
         console.log('cookie:' + res.headers['set-cookie']);
         var cookies = res.headers['set-cookie'];
+        if (self.app == 'tuita') {
+            cookies = cookies.replace(/.*__ttst=/,'__ttst=').replace(/;.*/,'');
+        }
         res.on('data', function(chunk) {
             // speed up!
             //if (!self.data)
