@@ -98,10 +98,11 @@ function redirect(req, res) {
         console.log('cookie:' + res.headers['set-cookie']);
         var cookies = res.headers['set-cookie'];
         res.on('data', function(chunk) {
-            if (!self.data)
-                self.data = chunk;
-            else
-                self.data += chunk;
+            // speed up!
+            //if (!self.data)
+            //    self.data = chunk;
+            //else
+            //    self.data += chunk;
         });
         res.on('error', function(e) {
             return error(self.res, e.message);
