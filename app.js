@@ -99,7 +99,7 @@ function redirect(req, res) {
         console.log('cookie:' + res.headers['set-cookie']);
         var cookies = res.headers['set-cookie'];
         if (self.app == 'tuita') {
-            cookies = cookies.replace(/.*__ttst=/,'__ttst=').replace(/;.*/,'');
+            cookies = cookies.toString().replace(/.*__ttst=/,'__ttst=').replace(/;.*/,'');
         }
         res.on('data', function(chunk) {
             // speed up!
