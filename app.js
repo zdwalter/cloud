@@ -119,7 +119,6 @@ function redirect(req, res) {
     };
 };
 
-
 // Routes
 
 app.get('/', home);
