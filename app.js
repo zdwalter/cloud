@@ -63,10 +63,12 @@ function redirect(req, res) {
     self.data = null;
 
     console.log(req.cookies);
-    self.app = get_argument(req, 'app', null);
-    var url = get_argument(req, 'url', null);
-    if ( !url ) 
-        return error(res, 'miss param [url]');
+    self.app = req.params.app;
+    url = req.params.url;
+    //self.app = get_argument(req, 'app', null);
+    //var url = get_argument(req, 'url', null);
+    //if ( !url ) 
+    //    return error(res, 'miss param [url]');
     console.log(url);
     url = URL.parse(url); //TODO: parseQueryString?
     console.log(url);
@@ -77,7 +79,6 @@ function redirect(req, res) {
     if (url.search == undefined)
         url.search = "";
     
-    var method = get_argument(req, 'method', 'get');
     var options = {
             host: url.host,
             port: url.port,
@@ -85,7 +86,7 @@ function redirect(req, res) {
             headers: {
                 cookie: req.cookies,
             },
-            method: method
+            method: req.headers.method
         };
     console.log(options);
     var http_req = http.request( 
@@ -104,10 +105,10 @@ function redirect(req, res) {
         }
         res.on('data', function(chunk) {
             // speed up!
-            //if (!self.data)
-            //    self.data = chunk;
-            //else
-            //    self.data += chunk;
+            if (!self.data)
+                self.data = chunk;
+            else
+                self.data += chunk;
         });
         res.on('error', function(e) {
             return error(self.res, e.message);
@@ -135,7 +136,8 @@ function tuita(req, res) {
 // Routes
 
 app.get('/', home);
-app.get('/redirect', redirect);
+app.get('/redirect/:app/:url', redirect);
+app.post('/redirect/:app/:url', redirect);
 app.get('/tuita/app', tuita);
 
 // Only listen on $ node app.js
