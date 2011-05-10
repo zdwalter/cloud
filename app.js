@@ -6,6 +6,7 @@
 var express = require('express');
 var http = require('http');
 var URL = require('url');
+var fs = require('fs');
 
 var app = module.exports = express.createServer();
 
@@ -119,10 +120,23 @@ function redirect(req, res) {
     };
 };
 
+var tuita_index;
+fs.readFile('public/tuita/index.html', function (err, data) {
+    if (err) {
+        throw err; 
+    }
+    tuita_index = data;
+});
+
+function tuita(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(tuita_index);
+    };
 // Routes
 
 app.get('/', home);
 app.get('/redirect', redirect);
+app.get('/tuita/app', tuita);
 
 // Only listen on $ node app.js
 
