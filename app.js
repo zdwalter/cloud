@@ -104,11 +104,13 @@ function redirect(req, res) {
         console.log('status:' + res.statusCode);
         console.log('headers:' + JSON.stringify(res.headers));
         console.log('cookie:' + res.headers['set-cookie']);
-        self.cookies = res.headers['set-cookie'];
-        //if (self.app == 'tuita' && cookies) {
-        //    //__ttst=MnXtqjYTm5dRHU%2A-eVt6NkAbrFCxdXTIyhaZLbLhyddYVOeZxnuuKfvyJ0nICNA4ShO18VikkacSMW5SwN5a07Q6-EUHEGzs4sn5wFvB3F4Hz2kbdp7JICM1RCBCAD%2A7AHbGbjzn448Hii4ZPjzz3Z2ZNlx%2AEoAGqAwdCn1wctemzGvPc6P7vq5bnJ%2ASldx7v40N75L2QYw; path=/; domain=tuita.com; httponly
-        //    self.cookies = cookies.toString().replace(/.*__ttst=/,'__ttst=').replace(/httponly.*/,'httponly');
-        //}
+        var cookies = res.headers['set-cookie'];
+        if (self.app == 'tuita' && cookies) {
+            //__ttst=MnXtqjYTm5dRHU%2A-eVt6NkAbrFCxdXTIyhaZLbLhyddYVOeZxnuuKfvyJ0nICNA4ShO18VikkacSMW5SwN5a07Q6-EUHEGzs4sn5wFvB3F4Hz2kbdp7JICM1RCBCAD%2A7AHbGbjzn448Hii4ZPjzz3Z2ZNlx%2AEoAGqAwdCn1wctemzGvPc6P7vq5bnJ%2ASldx7v40N75L2QYw; path=/; domain=tuita.com; httponly
+            self.cookies = cookies.toString().replace(/.*__ttst=/,'__ttst=').replace(/httponly.*/,'httponly');
+        }
+        else
+            self.cookies = cookies;
         console.log('cookie:' + self.cookies);
         res.on('data', function(chunk) {
             // speed up!
