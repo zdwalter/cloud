@@ -81,6 +81,7 @@ function redirect(req, res) {
     if (url.search == undefined)
         url.search = "";
     
+    console.log(req);
     var options = {
             host: url.host,
             port: url.port,
