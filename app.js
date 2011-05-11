@@ -62,6 +62,7 @@ function redirect(req, res) {
     self.res = res;
     self.data = null;
     self.cookies = null;
+    self['safe-cookie'] = null;
 
     console.log(req.cookies);
     self.app = req.params.app;
@@ -81,13 +82,14 @@ function redirect(req, res) {
     if (url.search == undefined)
         url.search = "";
     
-    console.log(req);
+    if (req.headers['safe-cookie'] != undefined)
+        self['safe-cookie'] = req.headers['safe-cookie'];
     var options = {
             host: url.host,
             port: url.port,
             path: url.pathname + url.search,
             headers: {
-                cookie: req.cookies,
+                cookie: self['safe-cookie'] ? self['safe-cookie'] : req.cookies,
                 'Content-Length': req.rawBody ? req.rawBody.length : 0,
             },
             method: req.method
