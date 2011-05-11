@@ -104,10 +104,11 @@ function redirect(req, res) {
         console.log('status:' + res.statusCode);
         console.log('headers:' + JSON.stringify(res.headers));
         console.log('cookie:' + res.headers['set-cookie']);
-        var cookies = res.headers['set-cookie'];
-        if (self.app == 'tuita' && cookies) {
-            self.cookies = cookies.toString().replace(/.*__ttst=/,'__ttst=').replace(/;.*/,'');
-        }
+        self.cookies = res.headers['set-cookie'];
+        //if (self.app == 'tuita' && cookies) {
+        //    //__ttst=MnXtqjYTm5dRHU%2A-eVt6NkAbrFCxdXTIyhaZLbLhyddYVOeZxnuuKfvyJ0nICNA4ShO18VikkacSMW5SwN5a07Q6-EUHEGzs4sn5wFvB3F4Hz2kbdp7JICM1RCBCAD%2A7AHbGbjzn448Hii4ZPjzz3Z2ZNlx%2AEoAGqAwdCn1wctemzGvPc6P7vq5bnJ%2ASldx7v40N75L2QYw; path=/; domain=tuita.com; httponly
+        //    self.cookies = cookies.toString().replace(/.*__ttst=/,'__ttst=').replace(/httponly.*/,'httponly');
+        //}
         console.log('cookie:' + self.cookies);
         res.on('data', function(chunk) {
             // speed up!
@@ -121,7 +122,7 @@ function redirect(req, res) {
         });
         res.on('end', function() {
             self.res.setHeader('Set-Cookie', self.cookies);
-            self.res.setHeader('Access-Control-Allow-Origin', '*');
+            //self.res.setHeader('Access-Control-Allow-Origin', '*');
             self.statusCode = 200; // don't want to auto redirect by ajax with res.statusCode;
             return self.res.end(self.data);
         });
