@@ -119,6 +119,7 @@ function redirect(req, res) {
         });
         res.on('end', function() {
             self.res.setHeader('Set-Cookie', cookies);
+            self.res.setHeader('Access-Control-Allow-Origin', '*');
             self.statusCode = 200; // don't want to auto redirect by ajax with res.statusCode;
             return self.res.end(self.data);
         });
