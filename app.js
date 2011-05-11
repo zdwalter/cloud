@@ -64,7 +64,8 @@ function redirect(req, res) {
 
     console.log(req.cookies);
     self.app = req.params.app;
-    url = req.params.url;
+    console.log(req.params);
+    url = req.params[0];
     //self.app = get_argument(req, 'app', null);
     //var url = get_argument(req, 'url', null);
     //if ( !url ) 
@@ -85,13 +86,16 @@ function redirect(req, res) {
             path: url.pathname + url.search,
             headers: {
                 cookie: req.cookies,
+                'Content-Length': req.rawBody ? req.rawBody.length : 0,
             },
-            method: req.headers.method
+            method: req.method
         };
     console.log(options);
     var http_req = http.request( 
         options,
         http_request);
+    if (req.method.toLowerCase() == 'post')
+        http_req.write(req.rawBody);
     http_req.end();
     return;
 
@@ -100,7 +104,7 @@ function redirect(req, res) {
         console.log('headers:' + JSON.stringify(res.headers));
         console.log('cookie:' + res.headers['set-cookie']);
         var cookies = res.headers['set-cookie'];
-        if (self.app == 'tuita') {
+        if (self.app == 'tuita' && cookies) {
             cookies = cookies.toString().replace(/.*__ttst=/,'__ttst=').replace(/;.*/,'');
         }
         res.on('data', function(chunk) {
@@ -136,8 +140,7 @@ function tuita(req, res) {
 // Routes
 
 app.get('/', home);
-app.get('/redirect/:app/:url', redirect);
-app.post('/redirect/:app/:url', redirect);
+app.all('/redirect/:app/*', redirect);
 app.get('/tuita/app', tuita);
 
 // Only listen on $ node app.js
