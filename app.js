@@ -19,7 +19,7 @@ app.configure(function(){
   app.use(express.cookieParser());
   app.use(express.methodOverride());
   app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+  app.use(express.static(__dirname + '/public/tuita'));
 });
 
 app.configure('development', function(){
@@ -127,7 +127,7 @@ function redirect(req, res) {
         });
         res.on('end', function() {
             self.res.setHeader('Safe-Set-Cookie', self.cookies);
-            //self.res.setHeader('Access-Control-Allow-Origin', '*');
+            self.res.setHeader('Access-Control-Allow-Origin', '*');
             self.statusCode = 200; // don't want to auto redirect by ajax with res.statusCode;
             return self.res.end(self.data);
         });
@@ -150,7 +150,7 @@ function tuita(req, res) {
 
 app.get('/', home);
 app.all('/redirect/:app/*', redirect);
-app.get('/tuita/app', tuita);
+app.get('/tuita', tuita);
 
 // Only listen on $ node app.js
 
