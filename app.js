@@ -61,6 +61,7 @@ function redirect(req, res) {
     self.req = req;
     self.res = res;
     self.data = null;
+    self.cookies = null;
 
     console.log(req.cookies);
     self.app = req.params.app;
@@ -105,8 +106,9 @@ function redirect(req, res) {
         console.log('cookie:' + res.headers['set-cookie']);
         var cookies = res.headers['set-cookie'];
         if (self.app == 'tuita' && cookies) {
-            cookies = cookies.toString().replace(/.*__ttst=/,'__ttst=').replace(/;.*/,'');
+            self.cookies = cookies.toString().replace(/.*__ttst=/,'__ttst=').replace(/;.*/,'');
         }
+        console.log('cookie:' + self.cookies);
         res.on('data', function(chunk) {
             // speed up!
             if (!self.data)
@@ -118,7 +120,7 @@ function redirect(req, res) {
             return error(self.res, e.message);
         });
         res.on('end', function() {
-            self.res.setHeader('Set-Cookie', cookies);
+            self.res.setHeader('Set-Cookie', self.cookies);
             self.res.setHeader('Access-Control-Allow-Origin', '*');
             self.statusCode = 200; // don't want to auto redirect by ajax with res.statusCode;
             return self.res.end(self.data);
