@@ -19,7 +19,7 @@ app.configure(function(){
   app.use(express.cookieParser());
   app.use(express.methodOverride());
   app.use(app.router);
-  app.use(express.static(__dirname + '/public/tuita'));
+  app.use(express.static(__dirname + '/public'));
 });
 
 app.configure('development', function(){
@@ -134,23 +134,19 @@ function redirect(req, res) {
     };
 };
 
-var tuita_index;
-fs.readFile('public/tuita/index.html', function (err, data) {
-    if (err) {
-        throw err; 
-    }
-    tuita_index = data;
-});
-
 function tuita(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(tuita_index);
+    res.redirect('/tuita/index.html');
+    };
+
+function AINotify(req, res) {
+    res.redirect('/AINotify/index.html');
     };
 // Routes
 
 app.get('/', home);
 app.all('/redirect/:app/*', redirect);
 app.get('/tuita', tuita);
+app.get('/AINotify', AINotify);
 
 // Only listen on $ node app.js
 
